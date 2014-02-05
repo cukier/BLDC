@@ -1,0 +1,328 @@
+CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 14:40
+
+               Filename:   D:\Eletronica\Projetos\PicKit3\main.lst
+
+               ROM used:   464 bytes (1%)
+                           Largest free fragment is 32300
+               RAM used:   32 (2%) at main() level
+                           33 (2%) worst case
+               Stack:     2 worst case (1 in main + 1 for interrupts)
+
+*
+0000:  GOTO   00F8
+*
+0008:  MOVWF  04
+000A:  MOVFF  FD8,05
+000E:  MOVFF  FE0,06
+0012:  MOVLB  0
+0014:  MOVFF  FE9,0C
+0018:  MOVFF  FEA,07
+001C:  MOVFF  FE1,08
+0020:  MOVFF  FE2,09
+0024:  MOVFF  FD9,0A
+0028:  MOVFF  FDA,0B
+002C:  MOVFF  FF3,12
+0030:  MOVFF  FF4,13
+0034:  MOVFF  FFA,14
+0038:  MOVFF  FF5,15
+003C:  MOVFF  FF6,16
+0040:  MOVFF  FF7,17
+0044:  MOVFF  00,0E
+0048:  MOVFF  01,0F
+004C:  MOVFF  02,10
+0050:  MOVFF  03,11
+0054:  BTFSS  FF2.4
+0056:  GOTO   0060
+005A:  BTFSC  FF2.1
+005C:  GOTO   00AE
+0060:  MOVFF  0E,00
+0064:  MOVFF  0F,01
+0068:  MOVFF  10,02
+006C:  MOVFF  11,03
+0070:  MOVFF  0C,FE9
+0074:  MOVFF  07,FEA
+0078:  BSF    07.7
+007A:  MOVFF  08,FE1
+007E:  MOVFF  09,FE2
+0082:  MOVFF  0A,FD9
+0086:  MOVFF  0B,FDA
+008A:  MOVFF  12,FF3
+008E:  MOVFF  13,FF4
+0092:  MOVFF  14,FFA
+0096:  MOVFF  15,FF5
+009A:  MOVFF  16,FF6
+009E:  MOVFF  17,FF7
+00A2:  MOVF   04,W
+00A4:  MOVFF  06,FE0
+00A8:  MOVFF  05,FD8
+00AC:  RETFIE 0
+.................... /* 
+....................  * main.c 
+....................  * 
+....................  *  Created on: 03/02/2014 
+....................  *      Author: cuki 
+....................  */ 
+.................... #include<18F45K20.h> 
+.................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
+.................... #device PIC18F45K20 
+.................... #list 
+....................  
+....................  
+.................... #fuses HS 
+....................  
+.................... #use delay(clock=15MHz) 
+*
+00D0:  CLRF   FEA
+00D2:  MOVLW  20
+00D4:  MOVWF  FE9
+00D6:  MOVF   FEF,W
+00D8:  BZ    00F6
+00DA:  MOVLW  04
+00DC:  MOVWF  01
+00DE:  CLRF   00
+00E0:  DECFSZ 00,F
+00E2:  BRA    00E0
+00E4:  DECFSZ 01,F
+00E6:  BRA    00DE
+00E8:  MOVLW  DC
+00EA:  MOVWF  00
+00EC:  DECFSZ 00,F
+00EE:  BRA    00EC
+00F0:  NOP   
+00F2:  DECFSZ FEF,F
+00F4:  BRA    00DA
+00F6:  RETURN 0
+.................... #use rs232(xmit=PIN_C6, baud=9600) 
+....................  
+.................... int a = FALSE, b = FALSE, c = FALSE; 
+.................... int cont = 0; 
+.................... long tempo = 300; 
+....................  
+.................... #INT_EXT 
+.................... void isr_ext() { 
+.................... 	clear_interrupt(INT_EXT); 
+*
+00AE:  BCF    FF2.1
+.................... 	tempo -= 10; 
+00B0:  MOVLW  0A
+00B2:  SUBWF  1D,F
+00B4:  MOVLW  00
+00B6:  SUBWFB 1E,F
+.................... 	if (tempo == 10) 
+00B8:  MOVF   1D,W
+00BA:  SUBLW  0A
+00BC:  BNZ   00CA
+00BE:  MOVF   1E,F
+00C0:  BNZ   00CA
+.................... 		tempo = 300; 
+00C2:  MOVLW  01
+00C4:  MOVWF  1E
+00C6:  MOVLW  2C
+00C8:  MOVWF  1D
+.................... } 
+....................  
+00CA:  BCF    FF2.1
+00CC:  GOTO   0060
+.................... int main(void) { 
+*
+00F8:  CLRF   FF8
+00FA:  BCF    FD0.7
+00FC:  BSF    07.7
+00FE:  CLRF   FEA
+0100:  CLRF   FE9
+0102:  BCF    F94.6
+0104:  BSF    F8B.6
+0106:  CLRF   19
+0108:  CLRF   1A
+010A:  CLRF   1B
+010C:  CLRF   1C
+010E:  MOVLW  01
+0110:  MOVWF  1E
+0112:  MOVLW  2C
+0114:  MOVWF  1D
+0116:  MOVLW  00
+0118:  MOVWF  F7E
+011A:  BCF    FC1.4
+011C:  BCF    FC1.5
+011E:  MOVF   F7F,W
+0120:  ANDLW  E0
+0122:  MOVWF  F7F
+0124:  BCF    F79.5
+0126:  BCF    F79.4
+0128:  CLRF   F7A
+012A:  CLRF   F7B
+....................  
+.................... 	clear_interrupt(INT_EXT); 
+012C:  BCF    FF2.1
+.................... 	enable_interrupts(INT_EXT); 
+012E:  BSF    FF2.4
+.................... 	enable_interrupts(GLOBAL); 
+0130:  MOVLW  C0
+0132:  IORWF  FF2,F
+....................  
+.................... 	while (TRUE) { 
+.................... 		if (cont == 5) 
+0134:  MOVF   1C,W
+0136:  SUBLW  05
+0138:  BNZ   013C
+.................... 			cont = 0; 
+013A:  CLRF   1C
+....................  
+.................... 		a = (cont & 0b100) >> 2; 
+013C:  MOVF   1C,W
+013E:  ANDLW  04
+0140:  MOVWF  00
+0142:  RRCF   00,W
+0144:  MOVWF  19
+0146:  RRCF   19,F
+0148:  MOVLW  3F
+014A:  ANDWF  19,F
+.................... 		b = (cont & 0b10) >> 1; 
+014C:  MOVF   1C,W
+014E:  ANDLW  02
+0150:  MOVWF  00
+0152:  BCF    FD8.0
+0154:  RRCF   00,W
+0156:  MOVWF  1A
+.................... 		c = cont & 1; 
+0158:  MOVF   1C,W
+015A:  ANDLW  01
+015C:  MOVWF  1B
+....................  
+.................... 		output_bit(PIN_D0, (!(b & c)) & !a); 
+015E:  MOVF   1A,W
+0160:  ANDWF  1B,W
+0162:  BZ    0168
+0164:  MOVLW  00
+0166:  BRA    016A
+0168:  MOVLW  01
+016A:  MOVWF  1F
+016C:  MOVF   19,F
+016E:  BZ    0174
+0170:  MOVLW  00
+0172:  BRA    0176
+0174:  MOVLW  01
+0176:  ANDWF  1F,W
+0178:  BNZ   017E
+017A:  BCF    F8C.0
+017C:  BRA    0180
+017E:  BSF    F8C.0
+0180:  BCF    F95.0
+.................... 		output_bit(PIN_D1, b | (!c & a)); 
+0182:  MOVF   1B,F
+0184:  BZ    018A
+0186:  MOVLW  00
+0188:  BRA    018C
+018A:  MOVLW  01
+018C:  ANDWF  19,W
+018E:  IORWF  1A,W
+0190:  BNZ   0196
+0192:  BCF    F8C.1
+0194:  BRA    0198
+0196:  BSF    F8C.1
+0198:  BCF    F95.1
+.................... 		output_bit(PIN_D2, (!a & c) | b); 
+019A:  MOVF   19,F
+019C:  BZ    01A2
+019E:  MOVLW  00
+01A0:  BRA    01A4
+01A2:  MOVLW  01
+01A4:  ANDWF  1B,W
+01A6:  IORWF  1A,W
+01A8:  BNZ   01AE
+01AA:  BCF    F8C.2
+01AC:  BRA    01B0
+01AE:  BSF    F8C.2
+01B0:  BCF    F95.2
+....................  
+.................... 		cont++; 
+01B2:  INCF   1C,F
+.................... 		delay_ms(tempo); 
+01B4:  MOVFF  1E,1F
+01B8:  INCF   1F,F
+01BA:  DECF   1F,F
+01BC:  BTFSC  FD8.2
+01BE:  BRA    01C6
+01C0:  SETF   20
+01C2:  RCALL  00D0
+01C4:  BRA    01BA
+01C6:  MOVFF  1D,20
+01CA:  RCALL  00D0
+.................... 	} 
+01CC:  BRA    0134
+....................  
+.................... 	return 0; 
+01CE:  MOVLW  00
+01D0:  MOVWF  01
+.................... } 
+....................  
+.................... //int cont = 1; 
+.................... //int cont2 = 0; 
+.................... //long tempo = 300; 
+.................... //short ctrl = FALSE; 
+.................... //short trigger = FALSE; 
+.................... // 
+.................... //#INT_EXT 
+.................... //void isr_ext() { 
+.................... //	clear_interrupt(INT_EXT); 
+.................... //	ctrl = TRUE; 
+.................... //	cont <<= 1; 
+.................... //	if (cont == 8 | !cont) 
+.................... //		cont = 1; 
+.................... //} 
+.................... // 
+.................... //int main(void) { 
+.................... // 
+.................... //	clear_interrupt(INT_EXT); 
+.................... //	enable_interrupts(INT_EXT); 
+.................... //	enable_interrupts(GLOBAL); 
+.................... // 
+.................... //	while (TRUE) { 
+.................... //		if (ctrl) { 
+.................... //			ctrl = FALSE; 
+.................... //			output_d(cont); 
+.................... //		} 
+.................... //	} 
+.................... //	return 0; 
+.................... //} 
+....................  
+.................... //int cont = 1; 
+.................... //int cont2 = 0; 
+.................... //long tempo = 300; 
+.................... //short ctrl = FALSE; 
+.................... //short trigger = FALSE; 
+.................... // 
+.................... //#INT_EXT 
+.................... //void isr_ext() { 
+.................... //	clear_interrupt(INT_EXT); 
+.................... //	tempo -= 10; 
+.................... //	if (!tempo) 
+.................... //		tempo = 300; 
+.................... //} 
+.................... // 
+.................... //int main(void) { 
+.................... // 
+.................... //	clear_interrupt(INT_EXT); 
+.................... //	enable_interrupts(INT_EXT); 
+.................... //	enable_interrupts(GLOBAL); 
+.................... // 
+.................... //	while (TRUE) { 
+.................... //		cont <<= 1; 
+.................... //		if (cont == 8) 
+.................... //			cont = 1; 
+.................... //		output_d(cont); 
+.................... //		delay_ms(tempo); 
+.................... //	} 
+.................... //	return 0; 
+.................... //} 
+....................  
+01D2:  SLEEP 
+
+Configuration Fuses:
+   Word  1: C200   HS FCMEN IESO
+   Word  2: 1E1E   PUT BROWNOUT BORV18 NOWDT WDT32768
+   Word  3: 8F00   CCP2C1 PBADEN LPT1OSC HFOFST MCLR
+   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
+   Word  5: C00F   NOPROTECT NOCPB NOCPD
+   Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
+   Word  7: 400F   NOEBTR NOEBTRB
