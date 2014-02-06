@@ -13,14 +13,14 @@
 
 int a = FALSE, b = FALSE, c = FALSE;
 int cont = 0;
-long tempo = 300;
+long tempo = 30000;
 
 #INT_EXT
 void isr_ext() {
 	clear_interrupt(INT_EXT);
-	tempo -= 10;
-	if (tempo == 10)
-		tempo = 300;
+	tempo -= 100;
+	if (tempo == 100)
+		tempo = 30000;
 }
 
 int main(void) {
@@ -30,7 +30,7 @@ int main(void) {
 	enable_interrupts(GLOBAL);
 
 	while (TRUE) {
-		if (cont == 5)
+		if (cont == 6)
 			cont = 0;
 
 		a = (cont & 0b100) >> 2;
@@ -42,7 +42,7 @@ int main(void) {
 		output_bit(PIN_D2, (!a & c) | b);
 
 		cont++;
-		delay_ms(tempo);
+		delay_us(tempo);
 	}
 
 	return 0;

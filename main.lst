@@ -1,15 +1,15 @@
-CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 14:40
+CCS PCH C Compiler, Version 4.140, 31805               06-fev-14 09:58
 
-               Filename:   D:\Eletronica\Projetos\PicKit3\main.lst
+               Filename:   D:\Eletronica\Projetos\BLDC\main.lst
 
-               ROM used:   464 bytes (1%)
-                           Largest free fragment is 32300
+               ROM used:   466 bytes (1%)
+                           Largest free fragment is 32298
                RAM used:   32 (2%) at main() level
                            33 (2%) worst case
                Stack:     2 worst case (1 in main + 1 for interrupts)
 
 *
-0000:  GOTO   00F8
+0000:  GOTO   00FA
 *
 0008:  MOVWF  04
 000A:  MOVFF  FD8,05
@@ -72,52 +72,53 @@ CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 14:40
 ....................  
 .................... #use delay(clock=15MHz) 
 *
-00D0:  CLRF   FEA
-00D2:  MOVLW  20
-00D4:  MOVWF  FE9
-00D6:  MOVF   FEF,W
-00D8:  BZ    00F6
-00DA:  MOVLW  04
-00DC:  MOVWF  01
-00DE:  CLRF   00
-00E0:  DECFSZ 00,F
-00E2:  BRA    00E0
-00E4:  DECFSZ 01,F
-00E6:  BRA    00DE
-00E8:  MOVLW  DC
-00EA:  MOVWF  00
-00EC:  DECFSZ 00,F
-00EE:  BRA    00EC
-00F0:  NOP   
-00F2:  DECFSZ FEF,F
-00F4:  BRA    00DA
-00F6:  RETURN 0
+00D0:  MOVLW  06
+00D2:  SUBWF  20,F
+00D4:  BNC   00F8
+00D6:  CLRF   FEA
+00D8:  MOVLW  20
+00DA:  MOVWF  FE9
+00DC:  MOVLW  FC
+00DE:  ANDWF  FEF,F
+00E0:  BCF    FD8.0
+00E2:  RRCF   FEF,F
+00E4:  RRCF   FEF,F
+00E6:  MOVF   FEF,W
+00E8:  BZ    00F8
+00EA:  MOVLW  03
+00EC:  MOVWF  00
+00EE:  DECFSZ 00,F
+00F0:  BRA    00EE
+00F2:  BRA    00F4
+00F4:  DECFSZ FEF,F
+00F6:  BRA    00EA
+00F8:  RETURN 0
 .................... #use rs232(xmit=PIN_C6, baud=9600) 
 ....................  
 .................... int a = FALSE, b = FALSE, c = FALSE; 
 .................... int cont = 0; 
-.................... long tempo = 300; 
+.................... long tempo = 30000; 
 ....................  
 .................... #INT_EXT 
 .................... void isr_ext() { 
 .................... 	clear_interrupt(INT_EXT); 
 *
 00AE:  BCF    FF2.1
-.................... 	tempo -= 10; 
-00B0:  MOVLW  0A
+.................... 	tempo -= 100; 
+00B0:  MOVLW  64
 00B2:  SUBWF  1D,F
 00B4:  MOVLW  00
 00B6:  SUBWFB 1E,F
-.................... 	if (tempo == 10) 
+.................... 	if (tempo == 100) 
 00B8:  MOVF   1D,W
-00BA:  SUBLW  0A
+00BA:  SUBLW  64
 00BC:  BNZ   00CA
 00BE:  MOVF   1E,F
 00C0:  BNZ   00CA
-.................... 		tempo = 300; 
-00C2:  MOVLW  01
+.................... 		tempo = 30000; 
+00C2:  MOVLW  75
 00C4:  MOVWF  1E
-00C6:  MOVLW  2C
+00C6:  MOVLW  30
 00C8:  MOVWF  1D
 .................... } 
 ....................  
@@ -125,135 +126,135 @@ CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 14:40
 00CC:  GOTO   0060
 .................... int main(void) { 
 *
-00F8:  CLRF   FF8
-00FA:  BCF    FD0.7
-00FC:  BSF    07.7
-00FE:  CLRF   FEA
-0100:  CLRF   FE9
-0102:  BCF    F94.6
-0104:  BSF    F8B.6
-0106:  CLRF   19
-0108:  CLRF   1A
-010A:  CLRF   1B
-010C:  CLRF   1C
-010E:  MOVLW  01
-0110:  MOVWF  1E
-0112:  MOVLW  2C
-0114:  MOVWF  1D
-0116:  MOVLW  00
-0118:  MOVWF  F7E
-011A:  BCF    FC1.4
-011C:  BCF    FC1.5
-011E:  MOVF   F7F,W
-0120:  ANDLW  E0
-0122:  MOVWF  F7F
-0124:  BCF    F79.5
-0126:  BCF    F79.4
-0128:  CLRF   F7A
-012A:  CLRF   F7B
+00FA:  CLRF   FF8
+00FC:  BCF    FD0.7
+00FE:  BSF    07.7
+0100:  CLRF   FEA
+0102:  CLRF   FE9
+0104:  BCF    F94.6
+0106:  BSF    F8B.6
+0108:  CLRF   19
+010A:  CLRF   1A
+010C:  CLRF   1B
+010E:  CLRF   1C
+0110:  MOVLW  75
+0112:  MOVWF  1E
+0114:  MOVLW  30
+0116:  MOVWF  1D
+0118:  MOVLW  00
+011A:  MOVWF  F7E
+011C:  BCF    FC1.4
+011E:  BCF    FC1.5
+0120:  MOVF   F7F,W
+0122:  ANDLW  E0
+0124:  MOVWF  F7F
+0126:  BCF    F79.5
+0128:  BCF    F79.4
+012A:  CLRF   F7A
+012C:  CLRF   F7B
 ....................  
 .................... 	clear_interrupt(INT_EXT); 
-012C:  BCF    FF2.1
+012E:  BCF    FF2.1
 .................... 	enable_interrupts(INT_EXT); 
-012E:  BSF    FF2.4
+0130:  BSF    FF2.4
 .................... 	enable_interrupts(GLOBAL); 
-0130:  MOVLW  C0
-0132:  IORWF  FF2,F
+0132:  MOVLW  C0
+0134:  IORWF  FF2,F
 ....................  
 .................... 	while (TRUE) { 
-.................... 		if (cont == 5) 
-0134:  MOVF   1C,W
-0136:  SUBLW  05
-0138:  BNZ   013C
+.................... 		if (cont == 6) 
+0136:  MOVF   1C,W
+0138:  SUBLW  06
+013A:  BNZ   013E
 .................... 			cont = 0; 
-013A:  CLRF   1C
+013C:  CLRF   1C
 ....................  
 .................... 		a = (cont & 0b100) >> 2; 
-013C:  MOVF   1C,W
-013E:  ANDLW  04
-0140:  MOVWF  00
-0142:  RRCF   00,W
-0144:  MOVWF  19
-0146:  RRCF   19,F
-0148:  MOVLW  3F
-014A:  ANDWF  19,F
+013E:  MOVF   1C,W
+0140:  ANDLW  04
+0142:  MOVWF  00
+0144:  RRCF   00,W
+0146:  MOVWF  19
+0148:  RRCF   19,F
+014A:  MOVLW  3F
+014C:  ANDWF  19,F
 .................... 		b = (cont & 0b10) >> 1; 
-014C:  MOVF   1C,W
-014E:  ANDLW  02
-0150:  MOVWF  00
-0152:  BCF    FD8.0
-0154:  RRCF   00,W
-0156:  MOVWF  1A
+014E:  MOVF   1C,W
+0150:  ANDLW  02
+0152:  MOVWF  00
+0154:  BCF    FD8.0
+0156:  RRCF   00,W
+0158:  MOVWF  1A
 .................... 		c = cont & 1; 
-0158:  MOVF   1C,W
-015A:  ANDLW  01
-015C:  MOVWF  1B
+015A:  MOVF   1C,W
+015C:  ANDLW  01
+015E:  MOVWF  1B
 ....................  
 .................... 		output_bit(PIN_D0, (!(b & c)) & !a); 
-015E:  MOVF   1A,W
-0160:  ANDWF  1B,W
-0162:  BZ    0168
-0164:  MOVLW  00
-0166:  BRA    016A
-0168:  MOVLW  01
-016A:  MOVWF  1F
-016C:  MOVF   19,F
-016E:  BZ    0174
-0170:  MOVLW  00
-0172:  BRA    0176
-0174:  MOVLW  01
-0176:  ANDWF  1F,W
-0178:  BNZ   017E
-017A:  BCF    F8C.0
-017C:  BRA    0180
-017E:  BSF    F8C.0
-0180:  BCF    F95.0
+0160:  MOVF   1A,W
+0162:  ANDWF  1B,W
+0164:  BZ    016A
+0166:  MOVLW  00
+0168:  BRA    016C
+016A:  MOVLW  01
+016C:  MOVWF  1F
+016E:  MOVF   19,F
+0170:  BZ    0176
+0172:  MOVLW  00
+0174:  BRA    0178
+0176:  MOVLW  01
+0178:  ANDWF  1F,W
+017A:  BNZ   0180
+017C:  BCF    F8C.0
+017E:  BRA    0182
+0180:  BSF    F8C.0
+0182:  BCF    F95.0
 .................... 		output_bit(PIN_D1, b | (!c & a)); 
-0182:  MOVF   1B,F
-0184:  BZ    018A
-0186:  MOVLW  00
-0188:  BRA    018C
-018A:  MOVLW  01
-018C:  ANDWF  19,W
-018E:  IORWF  1A,W
-0190:  BNZ   0196
-0192:  BCF    F8C.1
-0194:  BRA    0198
-0196:  BSF    F8C.1
-0198:  BCF    F95.1
+0184:  MOVF   1B,F
+0186:  BZ    018C
+0188:  MOVLW  00
+018A:  BRA    018E
+018C:  MOVLW  01
+018E:  ANDWF  19,W
+0190:  IORWF  1A,W
+0192:  BNZ   0198
+0194:  BCF    F8C.1
+0196:  BRA    019A
+0198:  BSF    F8C.1
+019A:  BCF    F95.1
 .................... 		output_bit(PIN_D2, (!a & c) | b); 
-019A:  MOVF   19,F
-019C:  BZ    01A2
-019E:  MOVLW  00
-01A0:  BRA    01A4
-01A2:  MOVLW  01
-01A4:  ANDWF  1B,W
-01A6:  IORWF  1A,W
-01A8:  BNZ   01AE
-01AA:  BCF    F8C.2
-01AC:  BRA    01B0
-01AE:  BSF    F8C.2
-01B0:  BCF    F95.2
+019C:  MOVF   19,F
+019E:  BZ    01A4
+01A0:  MOVLW  00
+01A2:  BRA    01A6
+01A4:  MOVLW  01
+01A6:  ANDWF  1B,W
+01A8:  IORWF  1A,W
+01AA:  BNZ   01B0
+01AC:  BCF    F8C.2
+01AE:  BRA    01B2
+01B0:  BSF    F8C.2
+01B2:  BCF    F95.2
 ....................  
 .................... 		cont++; 
-01B2:  INCF   1C,F
-.................... 		delay_ms(tempo); 
-01B4:  MOVFF  1E,1F
-01B8:  INCF   1F,F
-01BA:  DECF   1F,F
-01BC:  BTFSC  FD8.2
-01BE:  BRA    01C6
-01C0:  SETF   20
-01C2:  RCALL  00D0
-01C4:  BRA    01BA
-01C6:  MOVFF  1D,20
-01CA:  RCALL  00D0
+01B4:  INCF   1C,F
+.................... 		delay_us(tempo); 
+01B6:  MOVFF  1E,1F
+01BA:  INCF   1F,F
+01BC:  DECF   1F,F
+01BE:  BTFSC  FD8.2
+01C0:  BRA    01C8
+01C2:  SETF   20
+01C4:  RCALL  00D0
+01C6:  BRA    01BC
+01C8:  MOVFF  1D,20
+01CC:  RCALL  00D0
 .................... 	} 
-01CC:  BRA    0134
+01CE:  BRA    0136
 ....................  
 .................... 	return 0; 
-01CE:  MOVLW  00
-01D0:  MOVWF  01
+01D0:  MOVLW  00
+01D2:  MOVWF  01
 .................... } 
 ....................  
 .................... //int cont = 1; 
@@ -316,7 +317,7 @@ CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 14:40
 .................... //	return 0; 
 .................... //} 
 ....................  
-01D2:  SLEEP 
+01D4:  SLEEP 
 
 Configuration Fuses:
    Word  1: C200   HS FCMEN IESO
