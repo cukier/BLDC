@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 17:16
+CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 17:29
 
                Filename:   D:\Eletronica\Projetos\BLDC\main.lst
 
-               ROM used:   356 bytes (1%)
-                           Largest free fragment is 32408
+               ROM used:   352 bytes (1%)
+                           Largest free fragment is 32412
                RAM used:   31 (2%) at main() level
                            32 (2%) worst case
                Stack:     2 worst case (1 in main + 1 for interrupts)
@@ -185,17 +185,14 @@ CCS PCH C Compiler, Version 4.140, 31805               05-fev-14 17:16
 0154:  BRA    014A
 0156:  MOVFF  1B,1F
 015A:  RCALL  00CC
-.................... 		output_d(0); 
-015C:  CLRF   F95
-015E:  CLRF   F8C
 .................... 	} 
-0160:  BRA    0130
+015C:  BRA    0130
 .................... 	return 0; 
-0162:  MOVLW  00
-0164:  MOVWF  01
+015E:  MOVLW  00
+0160:  MOVWF  01
 .................... } 
 ....................  
-0166:  SLEEP 
+0162:  SLEEP 
 
 Configuration Fuses:
    Word  1: C200   HS FCMEN IESO

@@ -37,7 +37,6 @@ int main(void) {
 			cont = 1;
 		output_d(cont);
 		delay_ms(tempo);
-		output_d(0);
 	}
 	return 0;
 }
