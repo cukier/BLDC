@@ -1,9 +1,9 @@
-CCS PCH C Compiler, Version 4.140, 31805               06-fev-14 10:01
+CCS PCH C Compiler, Version 4.140, 31805               06-fev-14 11:23
 
                Filename:   D:\Eletronica\Projetos\BLDC\main.lst
 
-               ROM used:   356 bytes (1%)
-                           Largest free fragment is 32408
+               ROM used:   384 bytes (1%)
+                           Largest free fragment is 32380
                RAM used:   31 (2%) at main() level
                            32 (2%) worst case
                Stack:     2 worst case (1 in main + 1 for interrupts)
@@ -176,25 +176,44 @@ CCS PCH C Compiler, Version 4.140, 31805               06-fev-14 10:01
 .................... 		output_d(cont); 
 0142:  CLRF   F95
 0144:  MOVFF  19,F8C
+.................... 		if (!input(PIN_B1) && ctrl) { 
+0148:  BSF    F93.1
+014A:  BTFSC  F81.1
+014C:  BRA    015E
+014E:  BTFSS  1D.0
+0150:  BRA    015E
+.................... 			ctrl = FALSE; 
+0152:  BCF    1D.0
+.................... 			tempo -= 100; 
+0154:  MOVLW  64
+0156:  SUBWF  1B,F
+0158:  MOVLW  00
+015A:  SUBWFB 1C,F
+.................... 		} else if (!ctrl) 
+015C:  BRA    0164
+015E:  BTFSC  1D.0
+0160:  BRA    0164
+.................... 			ctrl = TRUE; 
+0162:  BSF    1D.0
 .................... 		delay_us(tempo); 
-0148:  MOVFF  1C,1E
-014C:  INCF   1E,F
-014E:  DECF   1E,F
-0150:  BTFSC  FD8.2
-0152:  BRA    015A
-0154:  SETF   1F
-0156:  RCALL  00CC
-0158:  BRA    014E
-015A:  MOVFF  1B,1F
-015E:  RCALL  00CC
+0164:  MOVFF  1C,1E
+0168:  INCF   1E,F
+016A:  DECF   1E,F
+016C:  BTFSC  FD8.2
+016E:  BRA    0176
+0170:  SETF   1F
+0172:  RCALL  00CC
+0174:  BRA    016A
+0176:  MOVFF  1B,1F
+017A:  RCALL  00CC
 .................... 	} 
-0160:  BRA    0134
+017C:  BRA    0134
 .................... 	return 0; 
-0162:  MOVLW  00
-0164:  MOVWF  01
+017E:  MOVLW  00
+0180:  MOVWF  01
 .................... } 
 ....................  
-0166:  SLEEP 
+0182:  SLEEP 
 
 Configuration Fuses:
    Word  1: C200   HS FCMEN IESO

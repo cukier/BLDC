@@ -36,6 +36,11 @@ int main(void) {
 		if (cont == 8)
 			cont = 1;
 		output_d(cont);
+		if (!input(PIN_B1) && ctrl) {
+			ctrl = FALSE;
+			tempo -= 100;
+		} else if (!ctrl)
+			ctrl = TRUE;
 		delay_us(tempo);
 	}
 	return 0;
