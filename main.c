@@ -13,16 +13,16 @@
 
 int cont = 1;
 int cont2 = 0;
-long tempo = 300;
+long tempo = 65000;
 short ctrl = FALSE;
 short trigger = FALSE;
 
 #INT_EXT
 void isr_ext() {
 	clear_interrupt(INT_EXT);
-	tempo -= 10;
+	tempo -= 1000;
 	if (!tempo)
-		tempo = 300;
+		tempo = 65000;
 }
 
 int main(void) {
@@ -36,7 +36,7 @@ int main(void) {
 		if (cont == 8)
 			cont = 1;
 		output_d(cont);
-		delay_ms(tempo);
+		delay_us(tempo);
 	}
 	return 0;
 }
