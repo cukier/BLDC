@@ -8,40 +8,57 @@
 
 #fuses H4
 
-#use delay(crystal=15MHz, clock=60MHz)
+#use delay(crystal=16MHz, clock=64MHz)
 #use rs232(xmit=PIN_C6, baud=9600)
 
-int cont = 1;
-int cont2 = 0;
-long tempo = 35000;
-long tempoAux = 0;
+#define bto PIN_B0
+//#define A 17
+//#define B 34
+//#define C 12
+
+int cont = 100;
 short ctrl = FALSE;
-short trigger = FALSE;
-int main(void) {
 
-	setup_ccp1(CCP_PWM);
-	setup_timer_2(T2_DIV_BY_1, 250, 1);
-	set_pwm1_duty(127);
+enum estadoTypes {
+	A, B, C
+} estados;
 
-	while (TRUE) {
-		cont <<= 1;
-		if (cont == 8)
-			cont = 1;
-		output_d(cont);
-		if (tempo > 4000) {
-			if (!input(PIN_B1) && ctrl) {
-				ctrl = FALSE;
-				tempo -= 500;
-			} else if (input(PIN_B1))
-				ctrl = TRUE;
-		}
-		if (tempoAux != tempo) {
-			tempoAux = tempo;
-			printf("\f%lu", tempo);
-		}
-		delay_us(tempo);
-	}
-
-	return 0;
+#INT_EXT
+void ext_isr() {
+	clear_interrupt(INT_EXT);
+	cont -= 10;
+	if (!cont)
+		cont = 100;
+	ctrl = TRUE;
 }
 
+int main(void) {
+
+	output_d(0);
+
+	clear_interrupt(INT_EXT);
+	enable_interrupts(INT_EXT | GLOBAL);
+
+	while (TRUE) {
+
+		delay_ms(cont);
+		switch (estados++) {
+		case A:
+			output_d(17);
+			break;
+		case B:
+			output_d(34);
+			break;
+		case C:
+			output_d(12);
+			estados = A;
+			break;
+		default:
+		}
+		if (ctrl) {
+			ctrl = FALSE;
+			printf("\f%d", cont);
+		}
+	}
+	return 0;
+}
