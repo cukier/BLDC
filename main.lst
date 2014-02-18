@@ -1,15 +1,15 @@
-CCS PCH C Compiler, Version 4.140, 31805               12-fev-14 17:04
+CCS PCH C Compiler, Version 4.140, 31805               19-fev-14 08:18
 
                Filename:   D:\Eletronica\Projetos\BLDC\main.lst
 
-               ROM used:   646 bytes (2%)
-                           Largest free fragment is 32118
+               ROM used:   688 bytes (2%)
+                           Largest free fragment is 32076
                RAM used:   28 (2%) at main() level
                            37 (2%) worst case
                Stack:     3 worst case (2 in main + 1 for interrupts)
 
 *
-0000:  GOTO   0208
+0000:  GOTO   0236
 *
 0008:  MOVWF  04
 000A:  MOVFF  FD8,05
@@ -62,72 +62,76 @@ CCS PCH C Compiler, Version 4.140, 31805               12-fev-14 17:04
 ....................  *  Created on: 03/02/2014 
 ....................  *      Author: cuki 
 ....................  */ 
-.................... #include<18F45K20.h> 
-.................... //////// Standard Header file for the PIC18F45K20 device //////////////// 
-.................... #device PIC18F45K20 
+.................... #include<18F452.h> 
+.................... //////// Standard Header file for the PIC18F452 device //////////////// 
+.................... #device PIC18F452 
 .................... #list 
 ....................  
 ....................  
 .................... #fuses H4 
 ....................  
-.................... #use delay(crystal=15MHz, clock=60MHz) 
+.................... #use delay(crystal=8MHz, clock=32MHz) 
 *
-00C4:  CLRF   FEA
-00C6:  MOVLW  1C
-00C8:  MOVWF  FE9
-00CA:  MOVF   FEF,W
-00CC:  BZ    00EA
-00CE:  MOVLW  13
-00D0:  MOVWF  01
-00D2:  CLRF   00
-00D4:  DECFSZ 00,F
-00D6:  BRA    00D4
-00D8:  DECFSZ 01,F
-00DA:  BRA    00D2
-00DC:  MOVLW  73
-00DE:  MOVWF  00
-00E0:  DECFSZ 00,F
-00E2:  BRA    00E0
-00E4:  NOP   
-00E6:  DECFSZ FEF,F
-00E8:  BRA    00CE
-00EA:  GOTO   0242 (RETURN)
+013A:  CLRF   FEA
+013C:  MOVLW  1C
+013E:  MOVWF  FE9
+0140:  MOVF   FEF,W
+0142:  BZ    015E
+0144:  MOVLW  0A
+0146:  MOVWF  01
+0148:  CLRF   00
+014A:  DECFSZ 00,F
+014C:  BRA    014A
+014E:  DECFSZ 01,F
+0150:  BRA    0148
+0152:  MOVLW  5F
+0154:  MOVWF  00
+0156:  DECFSZ 00,F
+0158:  BRA    0156
+015A:  DECFSZ FEF,F
+015C:  BRA    0144
+015E:  GOTO   026C (RETURN)
 .................... #use rs232(xmit=PIN_C6, baud=9600) 
-00EE:  BCF    F94.6
-00F0:  BCF    F8B.6
-00F2:  MOVLW  08
-00F4:  MOVWF  01
-00F6:  BRA    00F8
-00F8:  NOP   
-00FA:  BSF    01.7
-00FC:  BRA    011A
-00FE:  BCF    01.7
-0100:  RRCF   22,F
-0102:  BTFSC  FD8.0
-0104:  BSF    F8B.6
-0106:  BTFSS  FD8.0
-0108:  BCF    F8B.6
-010A:  BSF    01.6
-010C:  BRA    011A
-010E:  BCF    01.6
-0110:  DECFSZ 01,F
-0112:  BRA    0100
-0114:  BRA    0116
-0116:  NOP   
-0118:  BSF    F8B.6
-011A:  MOVLW  02
-011C:  MOVWF  00
-011E:  CLRF   FE9
-0120:  DECFSZ FE9,F
-0122:  BRA    0120
-0124:  DECFSZ 00,F
-0126:  BRA    011E
-0128:  BRA    012A
-012A:  BTFSC  01.7
-012C:  BRA    00FE
-012E:  BTFSC  01.6
-0130:  BRA    010E
-0132:  RETURN 0
+*
+00CA:  BCF    F94.6
+00CC:  BCF    F8B.6
+00CE:  MOVLW  08
+00D0:  MOVWF  01
+00D2:  BRA    00D4
+00D4:  NOP   
+00D6:  BSF    01.7
+00D8:  BRA    00F6
+00DA:  BCF    01.7
+00DC:  RRCF   22,F
+00DE:  BTFSC  FD8.0
+00E0:  BSF    F8B.6
+00E2:  BTFSS  FD8.0
+00E4:  BCF    F8B.6
+00E6:  BSF    01.6
+00E8:  BRA    00F6
+00EA:  BCF    01.6
+00EC:  DECFSZ 01,F
+00EE:  BRA    00DC
+00F0:  BRA    00F2
+00F2:  NOP   
+00F4:  BSF    F8B.6
+00F6:  MOVLW  01
+00F8:  MOVWF  00
+00FA:  CLRF   FE9
+00FC:  DECFSZ FE9,F
+00FE:  BRA    00FC
+0100:  DECFSZ 00,F
+0102:  BRA    00FA
+0104:  MOVLW  0E
+0106:  MOVWF  FE9
+0108:  DECFSZ FE9,F
+010A:  BRA    0108
+010C:  NOP   
+010E:  BTFSC  01.7
+0110:  BRA    00DA
+0112:  BTFSC  01.6
+0114:  BRA    00EA
+0116:  RETURN 0
 ....................  
 .................... #define bto PIN_B0 
 .................... //#define A 17 
@@ -163,104 +167,104 @@ CCS PCH C Compiler, Version 4.140, 31805               12-fev-14 17:04
 00C0:  GOTO   0060
 .................... int main(void) { 
 *
-0208:  CLRF   FF8
-020A:  BCF    FD0.7
-020C:  BSF    07.7
-020E:  CLRF   FEA
-0210:  CLRF   FE9
-0212:  BCF    F94.6
-0214:  BSF    F8B.6
-0216:  MOVLW  64
-0218:  MOVWF  19
-021A:  BCF    1A.0
-021C:  MOVLW  00
-021E:  MOVWF  F7E
-0220:  BCF    FC1.4
-0222:  BCF    FC1.5
-0224:  MOVF   F7F,W
-0226:  ANDLW  E0
-0228:  MOVWF  F7F
-022A:  BCF    F79.5
-022C:  BCF    F79.4
-022E:  CLRF   F7A
-0230:  CLRF   F7B
+0236:  CLRF   FF8
+0238:  BCF    FD0.7
+023A:  BSF    07.7
+023C:  CLRF   FEA
+023E:  CLRF   FE9
+0240:  BCF    F94.6
+0242:  BSF    F8B.6
+0244:  MOVLW  64
+0246:  MOVWF  19
+0248:  BCF    1A.0
+024A:  BSF    FC1.0
+024C:  BSF    FC1.1
+024E:  BSF    FC1.2
+0250:  BCF    FC1.3
 ....................  
 .................... 	output_d(0); 
-0232:  CLRF   F95
-0234:  CLRF   F8C
+0252:  CLRF   F95
+0254:  CLRF   F8C
 ....................  
 .................... 	clear_interrupt(INT_EXT); 
-0236:  BCF    FF2.1
+0256:  BCF    FF2.1
 .................... 	enable_interrupts(INT_EXT | GLOBAL); 
-0238:  MOVLW  D0
-023A:  IORWF  FF2,F
+0258:  MOVLW  D0
+025A:  IORWF  FF2,F
+....................  
+.................... 	printf("Hello"); 
+025C:  MOVLW  C4
+025E:  MOVWF  FF6
+0260:  MOVLW  00
+0262:  MOVWF  FF7
+0264:  BRA    0118
 ....................  
 .................... 	while (TRUE) { 
 ....................  
 .................... 		delay_ms(cont); 
-023C:  MOVFF  19,1C
-0240:  BRA    00C4
+0266:  MOVFF  19,1C
+026A:  BRA    013A
 .................... 		switch (estados++) { 
-0242:  MOVF   1B,W
-0244:  INCF   1B,F
-0246:  XORLW  00
-0248:  BZ    0254
-024A:  XORLW  01
-024C:  BZ    025C
-024E:  XORLW  03
-0250:  BZ    0264
-0252:  BRA    026C
+026C:  MOVF   1B,W
+026E:  INCF   1B,F
+0270:  XORLW  00
+0272:  BZ    027E
+0274:  XORLW  01
+0276:  BZ    0286
+0278:  XORLW  03
+027A:  BZ    028E
+027C:  BRA    0296
 .................... 		case A: 
 .................... 			output_d(17); 
-0254:  CLRF   F95
-0256:  MOVLW  11
-0258:  MOVWF  F8C
+027E:  CLRF   F95
+0280:  MOVLW  11
+0282:  MOVWF  F8C
 .................... 			break; 
-025A:  BRA    026C
+0284:  BRA    0296
 .................... 		case B: 
 .................... 			output_d(34); 
-025C:  CLRF   F95
-025E:  MOVLW  22
-0260:  MOVWF  F8C
+0286:  CLRF   F95
+0288:  MOVLW  22
+028A:  MOVWF  F8C
 .................... 			break; 
-0262:  BRA    026C
+028C:  BRA    0296
 .................... 		case C: 
 .................... 			output_d(12); 
-0264:  CLRF   F95
-0266:  MOVLW  0C
-0268:  MOVWF  F8C
+028E:  CLRF   F95
+0290:  MOVLW  0C
+0292:  MOVWF  F8C
 .................... 			estados = A; 
-026A:  CLRF   1B
+0294:  CLRF   1B
 .................... 			break; 
 .................... 		default: 
 .................... 		} 
 .................... 		if (ctrl) { 
-026C:  BTFSS  1A.0
-026E:  BRA    0282
+0296:  BTFSS  1A.0
+0298:  BRA    02AC
 .................... 			ctrl = FALSE; 
-0270:  BCF    1A.0
+029A:  BCF    1A.0
 .................... 			printf("\f%d", cont); 
-0272:  MOVLW  0C
-0274:  MOVWF  22
-0276:  RCALL  00EE
-0278:  MOVFF  19,1C
-027C:  MOVLW  18
-027E:  MOVWF  1D
-0280:  BRA    015C
+029C:  MOVLW  0C
+029E:  MOVWF  22
+02A0:  RCALL  00CA
+02A2:  MOVFF  19,1C
+02A6:  MOVLW  18
+02A8:  MOVWF  1D
+02AA:  BRA    018A
 .................... 		} 
 .................... 	} 
-0282:  BRA    023C
+02AC:  BRA    0266
 .................... 	return 0; 
-0284:  MOVLW  00
-0286:  MOVWF  01
+02AE:  MOVLW  00
+02B0:  MOVWF  01
 .................... } 
-0288:  SLEEP 
+02B2:  SLEEP 
 
 Configuration Fuses:
-   Word  1: C600   H4 FCMEN IESO
-   Word  2: 1E1E   PUT BROWNOUT BORV18 NOWDT WDT32768
-   Word  3: 8F00   CCP2C1 PBADEN LPT1OSC HFOFST MCLR
-   Word  4: 0081   STVREN NOLVP NOXINST NODEBUG
+   Word  1: 2600   H4 NOOSCSEN
+   Word  2: 0E0E   PUT BROWNOUT BORV20 NOWDT WDT128
+   Word  3: 0100   CCP2C1
+   Word  4: 0081   STVREN NOLVP NODEBUG
    Word  5: C00F   NOPROTECT NOCPB NOCPD
    Word  6: E00F   NOWRT NOWRTC NOWRTB NOWRTD
    Word  7: 400F   NOEBTR NOEBTRB

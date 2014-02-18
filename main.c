@@ -4,11 +4,11 @@
  *  Created on: 03/02/2014
  *      Author: cuki
  */
-#include<18F45K20.h>
+#include<18F452.h>
 
 #fuses H4
 
-#use delay(crystal=16MHz, clock=64MHz)
+#use delay(crystal=8MHz, clock=32MHz)
 #use rs232(xmit=PIN_C6, baud=9600)
 
 #define bto PIN_B0
@@ -38,6 +38,8 @@ int main(void) {
 
 	clear_interrupt(INT_EXT);
 	enable_interrupts(INT_EXT | GLOBAL);
+
+	printf("Hello");
 
 	while (TRUE) {
 
