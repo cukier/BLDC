@@ -12,54 +12,49 @@
 #use rs232(xmit=PIN_C6, baud=9600)
 
 #define bto PIN_B0
-//#define A 17
-//#define B 34
-//#define C 12
 
-int cont = 100;
-short ctrl = FALSE;
-
-enum estadoTypes {
-	A, B, C
-} estados;
+int saida = 1;
+long reg_timer0 = 15535;
+short ctrl = TRUE;
 
 #INT_EXT
 void ext_isr() {
+	delay_ms(100);
 	clear_interrupt(INT_EXT);
-	cont -= 10;
-	if (!cont)
-		cont = 100;
+	reg_timer0 += 2500;
+	if (reg_timer0 == 60000)
+		reg_timer0 = 15535;
 	ctrl = TRUE;
+}
+
+#INT_TIMER0
+void timer_isr() {
+	clear_interrupt(INT_TIMER0);
+	set_timer0(reg_timer0);
+	saida <<= 1;
+	if (saida == 8)
+		saida = 1;
+	output_c(saida);
 }
 
 int main(void) {
 
-	output_d(0);
+	output_c(0);
 
 	clear_interrupt(INT_EXT);
-	enable_interrupts(INT_EXT | GLOBAL);
+	clear_interrupt(INT_TIMER0);
+	set_timer0(reg_timer0);
+	setup_timer_0(T0_DIV_16 | T0_INTERNAL);
+	enable_interrupts(INT_EXT | INT_TIMER0 | GLOBAL);
 
-	printf("Hello");
+	printf("\fHello");
 
 	while (TRUE) {
-
-		delay_ms(cont);
-		switch (estados++) {
-		case A:
-			output_d(17);
-			break;
-		case B:
-			output_d(34);
-			break;
-		case C:
-			output_d(12);
-			estados = A;
-			break;
-		default:
-		}
 		if (ctrl) {
 			ctrl = FALSE;
-			printf("\f%d", cont);
+			printf("%c", 12);
+			delay_ms(10);
+			printf("t: %.3f", (65535 - reg_timer0) * 0.000002);
 		}
 	}
 	return 0;
