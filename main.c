@@ -12,49 +12,60 @@
 #use rs232(xmit=PIN_C6, baud=9600)
 
 #define bto PIN_B0
+#define A 33
+#define B 17
+#define C 20
+#define D 12
+#define E 10
+#define F 34
 
-int saida = 1;
-long reg_timer0 = 15535;
+long tempo = 500;
+int cont = 0;
 short ctrl = TRUE;
 
 #INT_EXT
 void ext_isr() {
 	delay_ms(100);
 	clear_interrupt(INT_EXT);
-	reg_timer0 += 2500;
-	if (reg_timer0 == 60000)
-		reg_timer0 = 15535;
+	tempo -= 50;
+	if (tempo <= 50)
+		tempo = 500;
 	ctrl = TRUE;
 }
 
-#INT_TIMER0
-void timer_isr() {
-	clear_interrupt(INT_TIMER0);
-	set_timer0(reg_timer0);
-	saida <<= 1;
-	if (saida == 8)
-		saida = 1;
-	output_c(saida);
+int muda_estado(int entrada) {
+	switch (entrada) {
+	case 1:
+		return A;
+	case 2:
+		return B;
+	case 3:
+		return C;
+	case 4:
+		return D;
+	case 5:
+		return E;
+	case 6:
+		return F;
+	}
 }
 
 int main(void) {
 
 	output_c(0);
 
-	clear_interrupt(INT_EXT);
-	clear_interrupt(INT_TIMER0);
-	set_timer0(reg_timer0);
-	setup_timer_0(T0_DIV_16 | T0_INTERNAL);
-	enable_interrupts(INT_EXT | INT_TIMER0 | GLOBAL);
+	enable_interrupts(INT_EXT_H2L | GLOBAL);
 
 	printf("\fHello");
 
 	while (TRUE) {
+		output_c(muda_estado(++cont));
+		if (cont == 6)
+			cont = 0;
+		delay_ms(tempo);
 		if (ctrl) {
 			ctrl = FALSE;
-			printf("%c", 12);
-			delay_ms(10);
-			printf("t: %.3f", (65535 - reg_timer0) * 0.000002);
+			printf("\f%lu", tempo);
 		}
 	}
 	return 0;
