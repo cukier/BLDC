@@ -19,35 +19,19 @@
 #define E 10
 #define F 34
 
-long tempo = 500;
-int cont = 0;
+long tempo = 65000;
+int cont = 1;
 short ctrl = TRUE;
+short on_off = TRUE;
 
 #INT_EXT
 void ext_isr() {
 	delay_ms(100);
 	clear_interrupt(INT_EXT);
-	tempo -= 50;
-	if (tempo <= 50)
-		tempo = 500;
+	tempo -= 1000;
+	if (tempo == 1000)
+		tempo = 65000;
 	ctrl = TRUE;
-}
-
-int muda_estado(int entrada) {
-	switch (entrada) {
-	case 1:
-		return A;
-	case 2:
-		return B;
-	case 3:
-		return C;
-	case 4:
-		return D;
-	case 5:
-		return E;
-	case 6:
-		return F;
-	}
 }
 
 int main(void) {
@@ -59,13 +43,14 @@ int main(void) {
 	printf("\fHello");
 
 	while (TRUE) {
-		output_c(muda_estado(++cont));
-		if (cont == 6)
-			cont = 0;
-		delay_ms(tempo);
+		cont <<= 1;
+		if (cont == 0b1000)
+			cont = 1;
+		output_c(cont);
+		delay_us(tempo);
 		if (ctrl) {
 			ctrl = FALSE;
-			printf("\f%lu", tempo);
+			printf("%lu\r\n", tempo);
 		}
 	}
 	return 0;

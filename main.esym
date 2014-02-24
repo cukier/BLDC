@@ -1,7 +1,7 @@
 D G "__PCH__" 0 0 ""4.140""
 D G "__DEVICE__" 0 0 ""
-D G "__DATE__" 0 0 ""20-fev-14""
-D G "__TIME__" 0 0 ""14:18:25"" "* main.c"
+D G "__DATE__" 0 0 ""24-fev-14""
+D G "__TIME__" 0 0 ""07:57:02"" "* main.c"
 C G "" 0 1 1 "*"
 C G "" 0 1 1 "*"
 d G "PIN_A0" 1 22 "31744"
@@ -238,10 +238,9 @@ D G "F" 0 20 "34"
 V G "tempo" 0 22 "int16"
 V G "cont" 0 23 "int8"
 V G "ctrl" 0 24 "int1"
-F G "ext_isr" 0 27 "void()"
-V L "entrada" 0 36 "int8"
-F G "muda_estado" 0 36 "int8(int8 entrada)"
-F G "MAIN" 0 53 "int8()"
+V G "on_off" 0 25 "int1"
+F G "ext_isr" 0 28 "void()"
+F G "MAIN" 0 37 "int8()"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 0
