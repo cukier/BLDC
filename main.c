@@ -14,7 +14,7 @@
 #define bto PIN_B0
 #define tempo0 3035
 
-int tempo = 500, cont = 1, estado_timer0 = 0;
+int tempo = 500, cont = 1, estado_timer0 = 0, config_timer;
 short print = TRUE, on_off = TRUE, trigger;
 
 #INT_EXT
@@ -23,16 +23,16 @@ void ext_isr() {
 	clear_interrupt(INT_EXT);
 	switch (estado_timer0++) {
 	case 0:
-		setup_timer_0(T0_INTERNAL | T0_DIV_64);
-		break;
-	case 1:
-		setup_timer_0(T0_INTERNAL | T0_DIV_32);
-		break;
-	case 2:
 		setup_timer_0(T0_INTERNAL | T0_DIV_16);
 		break;
-	case 3:
+	case 1:
 		setup_timer_0(T0_INTERNAL | T0_DIV_8);
+		break;
+	case 2:
+		setup_timer_0(T0_INTERNAL | T0_DIV_4);
+		break;
+	case 3:
+		setup_timer_0(T0_INTERNAL | T0_DIV_2);
 		estado_timer0 = 0;
 		break;
 	default:

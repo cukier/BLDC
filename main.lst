@@ -1,4 +1,4 @@
-CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 15:25
+CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 15:30
 
                Filename:   D:\Eletronica\Projetos\BLDC\main.lst
 
@@ -169,26 +169,26 @@ CCS PCH C Compiler, Version 4.140, 31805               25-fev-14 15:25
 0106:  BZ    011C
 0108:  BRA    0124
 .................... 	case 0: 
-.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_64); 
-010A:  MOVLW  85
+.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_16); 
+010A:  MOVLW  83
 010C:  MOVWF  FD5
 .................... 		break; 
 010E:  BRA    0126
 .................... 	case 1: 
-.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_32); 
-0110:  MOVLW  84
+.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_8); 
+0110:  MOVLW  82
 0112:  MOVWF  FD5
 .................... 		break; 
 0114:  BRA    0126
 .................... 	case 2: 
-.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_16); 
-0116:  MOVLW  83
+.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_4); 
+0116:  MOVLW  81
 0118:  MOVWF  FD5
 .................... 		break; 
 011A:  BRA    0126
 .................... 	case 3: 
-.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_8); 
-011C:  MOVLW  82
+.................... 		setup_timer_0(T0_INTERNAL | T0_DIV_2); 
+011C:  MOVLW  80
 011E:  MOVWF  FD5
 .................... 		estado_timer0 = 0; 
 0120:  CLRF   1B
